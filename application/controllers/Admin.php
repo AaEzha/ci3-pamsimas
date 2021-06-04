@@ -257,11 +257,14 @@ class Admin extends CI_Controller
     }
 
 
-    public function Payment()
+    public function payment()
     {
         $data['title'] = 'Payment';
         $data['user'] = $this->db->get_where('user', ['email' =>
         $this->session->userdata('email')])->row_array();
+
+		$this->db->order_by('date', 'desc');
+		$data['data'] = $this->db->get('payment')->result();
 
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar', $data);
@@ -269,4 +272,25 @@ class Admin extends CI_Controller
         $this->load->view('admin/payment', $data);
         $this->load->view('templates/footer');
     }
+
+	public function payment_ubah($id, $status)
+	{
+		$this->db->where('id', $id);
+		if(md5("1") == $status){
+			$this->db->set('status', 1);
+		}elseif(md5("0") == $status){
+			$this->db->set('status', 0);
+		}elseif(md5("2") == $status){
+			$this->db->set('status', 2);
+		}elseif(md5("3") == $status) {
+			$this->db->set('status', 3);
+		}else{
+			return redirect('admin/payment');
+		}
+
+		$this->db->update('payment');
+
+		redirect('admin/payment');
+	}
+
 }

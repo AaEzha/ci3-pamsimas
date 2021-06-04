@@ -5,7 +5,7 @@
            <h1 class="h3 mb-4 text-gray-800"><?= $title; ?> </h1>
 
            <div class="row">
-               <div class="col-lg-10">
+               <div class="col-lg-12">
                    <div class="col-md-5">
                        <form action="" method="post">
                            <div class="input-group mb-4">
@@ -22,7 +22,7 @@
 
                    <?= $this->session->flashdata('message'); ?>
 
-                   <table class="table table-hover">
+                   <table class="table table-hover" id="tabel">
                        <thead>
                            <tr>
                                <th scope="col-lg">No.</th>
