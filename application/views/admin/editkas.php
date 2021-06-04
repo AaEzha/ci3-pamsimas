@@ -42,11 +42,6 @@
                                      <input type="text" name="kredit" class="form-control" id="kredit" value="<?= $kas_harian['kredit']; ?>">
                                  </div>
 
-                                 <div class="form-group">
-                                     <label for="jumlah">Saldo</label>
-                                     <input type="text" name="jumlah" class="form-control" id="jumlah" value="<?= $kas_harian['jumlah']; ?>">
-                                 </div>
-
                          </div>
 
                          <div class="modal-footer">

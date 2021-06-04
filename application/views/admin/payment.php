@@ -56,9 +56,9 @@
         									<a class="btn btn-danger btn-sm" href="<?= base_url('admin/payment_ubah/' . $p->id . '/' . md5('3')); ?>" role="button" title="tolak pembayaran"><i class="fa fa-trash" aria-hidden="true"></i></a>
         								<?php } else if ($p->status == 1) { ?>
         									<a class="btn btn-danger btn-sm" href="<?= base_url('admin/payment_ubah/' . $p->id . '/' . md5('3')); ?>" role="button" title="tolak pembayaran"><i class="fa fa-trash" aria-hidden="true"></i></a>
-        									<a class="btn btn-dark btn-sm" href="<?= base_url('admin/payment_ubah/' . $p->id . '/' . md5('0')); ?>" role="button" title="tahan pembayaran"><i class="fa fa-trash" aria-hidden="true"></i></a>
+        									<a class="btn btn-dark btn-sm" href="<?= base_url('admin/payment_ubah/' . $p->id . '/' . md5('0')); ?>" role="button" title="tahan pembayaran"><i class="fa fa-recycle" aria-hidden="true"></i></a>
         								<?php } else if ($p->status == 3) { ?>
-											<a class="btn btn-dark btn-sm" href="<?= base_url('admin/payment_ubah/' . $p->id . '/' . md5('0')); ?>" role="button" title="tahan pembayaran"><i class="fa fa-trash" aria-hidden="true"></i></a>
+											<a class="btn btn-dark btn-sm" href="<?= base_url('admin/payment_ubah/' . $p->id . '/' . md5('0')); ?>" role="button" title="tahan pembayaran"><i class="fa fa-recycle" aria-hidden="true"></i></a>
         								<?php } ?>
         							</td>
         						</tr>
