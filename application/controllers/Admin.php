@@ -132,6 +132,7 @@ class Admin extends CI_Controller
 
     public function kasharian()
     {
+		$this->kas();
         $data['title'] = 'Kas Harian';
         $data['user'] = $this->db->get_where('user', ['email' =>
         $this->session->userdata('email')])->row_array();
@@ -153,7 +154,6 @@ class Admin extends CI_Controller
                 'ket' => $this->input->post('ket'),
                 'debet' => $this->input->post('debet'),
                 'kredit' => $this->input->post('kredit'),
-                'jumlah' => $this->input->post('jumlah')
 
             ];
             $this->db->insert('kas_harian', $data);
@@ -197,6 +197,19 @@ class Admin extends CI_Controller
             redirect('admin/kasharian');
         }
     }
+
+	public function kas()
+	{
+		$this->db->order_by('id', 'asc');
+		$data = $this->db->get('kas_harian')->result();
+		$jumlah = 0;
+		foreach($data as $d){
+			$jumlah = $jumlah + $d->debet - $d->kredit;
+			$this->db->set('jumlah', $jumlah);
+			$this->db->where('id', $d->id);
+			$this->db->update('kas_harian');
+		}
+	}
 
     public function Pelanggan()
     {

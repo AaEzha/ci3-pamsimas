@@ -24,8 +24,7 @@ class Pelanggan_model extends CI_model
             'date' => $this->input->post('date'),
             'ket' => $this->input->post('ket'),
             'debet' => $this->input->post('debet'),
-            'kredit' => $this->input->post('kredit'),
-            'jumlah' => $this->input->post('jumlah')
+            'kredit' => $this->input->post('kredit')
 
         ];
         $this->db->set($data);
