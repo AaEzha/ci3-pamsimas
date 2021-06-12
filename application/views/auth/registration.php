@@ -13,6 +13,10 @@
                             </div>
                             <form class="user" method="post" action="<?= base_url('auth/registration'); ?>">
                                 <div class="form-group">
+                                    <input type="text" class="form-control form-control-user" id="nik" name="nik" placeholder="NIK" value="<?= set_value('nik') ?>">
+                                    <?= form_error('nik', '<small class="text-danger pl-3">', '</small>'); ?>
+                                </div>
+                                <div class="form-group">
                                     <input type="text" class="form-control form-control-user" id="name" name="name" placeholder="Full Name" value="<?= set_value('name') ?>">
                                     <?= form_error('name', '<small class="text-danger pl-3">', '</small>'); ?>
                                 </div>

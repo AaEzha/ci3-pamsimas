@@ -42,7 +42,6 @@ class User extends CI_Controller
 		// var_dump($data['pelanggan']); die;
 
 		$this->form_validation->set_rules('name', 'Full Name', 'required|trim');
-		$this->form_validation->set_rules('nik', 'NIK', 'required|trim');
 		$this->form_validation->set_rules('alamat', 'Alamat', 'required|trim');
 		$this->form_validation->set_rules('pekerjaan', 'Pekerjaan', 'required|trim');
 
@@ -54,32 +53,28 @@ class User extends CI_Controller
 			$this->load->view('templates/footer');
 		} else {
 			$name = $this->input->post('name');
-			$email = $this->input->post('email');
-			$nik = $this->input->post('nik');
 			$alamat = $this->input->post('alamat');
 			$pekerjaan = $this->input->post('pekerjaan');
 
 			//cek data jika ada gambar yang di upload
-
-			$upload_image = $_FILES['image']['name'];
-
-			if ($upload_image) {
-				$config['allowed_types'] = 'gif|jpg|png';
-				$config['max_size']      = '2048';
-				$config['upload_path']   = './assets/img/profile/';
-
+			if(!empty($_FILES['image']['name']))
+			{
+				$config['upload_path']          = './assets/img/profile/';
+				$config['allowed_types']        = 'gif|jpg|png|jpeg';
+				$config['encrypt_name']         = true;
+	
 				$this->load->library('upload', $config);
 
-				if ($this->upload->do_upload('image')) {
+				if (!$this->upload->do_upload('image')) {
+					$this->session->set_flashdata('message', 'Terjadi kesalahan pada pemilihan gambar');
+					return redirect('user/edit', 'refresh');
+				} else {
 					$old_image = $data['user']['image'];
 					if ($old_image != 'default.jpg') {
 						unlink(FCPATH . 'assets/img/profile/' . $old_image);
 					}
-
 					$new_image = $this->upload->data('file_name');
 					$this->db->set('image', $new_image);
-				} else {
-					echo $this->upload->display_errors();
 				}
 			}
 
@@ -88,7 +83,6 @@ class User extends CI_Controller
 			$this->db->where('email', $this->session->userdata('email'));
 			$this->db->update('user');
 			// tabel pelanggan
-			$this->db->set('nik', $nik);
 			$this->db->set('pekerjaan', $pekerjaan);
 			$this->db->set('alamat', $alamat);
 			$this->db->where('email', $this->session->userdata('email'));
