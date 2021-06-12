@@ -19,6 +19,8 @@ class User extends CI_Controller
 		$data['title'] = 'My Profile';
 		$data['user'] = $this->db->get_where('user', ['email' =>
 		$this->session->userdata('email')])->row_array();
+		$data['pelanggan'] = $this->db->get_where('pelanggan', ['email' =>
+		$this->session->userdata('email')])->row_array();
 
 		$this->load->view('templates/header', $data);
 		$this->load->view('templates/sidebar', $data);
@@ -34,7 +36,15 @@ class User extends CI_Controller
 		$data['user'] = $this->db->get_where('user', ['email' =>
 		$this->session->userdata('email')])->row_array();
 
+		$data['pelanggan'] = $this->db->get_where('pelanggan', ['email' =>
+		$this->session->userdata('email')])->row_array();
+
+		// var_dump($data['pelanggan']); die;
+
 		$this->form_validation->set_rules('name', 'Full Name', 'required|trim');
+		$this->form_validation->set_rules('nik', 'NIK', 'required|trim');
+		$this->form_validation->set_rules('alamat', 'Alamat', 'required|trim');
+		$this->form_validation->set_rules('pekerjaan', 'Pekerjaan', 'required|trim');
 
 		if ($this->form_validation->run() == false) {
 			$this->load->view('templates/header', $data);
@@ -45,6 +55,9 @@ class User extends CI_Controller
 		} else {
 			$name = $this->input->post('name');
 			$email = $this->input->post('email');
+			$nik = $this->input->post('nik');
+			$alamat = $this->input->post('alamat');
+			$pekerjaan = $this->input->post('pekerjaan');
 
 			//cek data jika ada gambar yang di upload
 
@@ -70,13 +83,20 @@ class User extends CI_Controller
 				}
 			}
 
+			// tabel user
 			$this->db->set('name', $name);
-			$this->db->where('email', $email);
+			$this->db->where('email', $this->session->userdata('email'));
 			$this->db->update('user');
+			// tabel pelanggan
+			$this->db->set('nik', $nik);
+			$this->db->set('pekerjaan', $pekerjaan);
+			$this->db->set('alamat', $alamat);
+			$this->db->where('email', $this->session->userdata('email'));
+			$this->db->update('pelanggan');
 
 			$this->session->set_flashdata('message', '<div class="alert alert-success" 
             role="alert"> Berhasil diupdate </div>');
-			redirect('user');
+			redirect('user/edit');
 		}
 	}
 
