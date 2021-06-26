@@ -146,6 +146,17 @@
   		"autoWidth": false,
   		"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
   	}).buttons().container().appendTo('#tabel_wrapper .col-md-6:eq(0)');
+
+  	function printDiv(divName) {
+  		var printContents = document.getElementById(divName).innerHTML;
+  		var originalContents = document.body.innerHTML;
+
+  		document.body.innerHTML = printContents;
+
+  		window.print();
+
+  		document.body.innerHTML = originalContents;
+  	}
   </script>
   </body>
 

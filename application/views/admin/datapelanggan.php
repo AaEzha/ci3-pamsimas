@@ -6,18 +6,6 @@
 
            <div class="row">
                <div class="col-lg-12">
-                   <div class="col-md-5">
-                       <form action="" method="post">
-                           <div class="input-group mb-4">
-                               <input type="text" class="form-control" placeholder="Cari Data Pelanggan..." name="keyword" autocomplete="off" autofocus>
-                               <div class="input-group-append">
-                                   <button class="btn btn-primary" type="submit">Cari</button>
-
-                               </div>
-                           </div>
-
-                   </div>
-
                    </form>
 
                    <?= $this->session->flashdata('message'); ?>
