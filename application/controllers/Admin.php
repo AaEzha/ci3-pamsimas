@@ -163,6 +163,28 @@ class Admin extends CI_Controller
         }
     }
 
+	public function filterkas()
+	{
+		$this->form_validation->set_rules('bulan', 'Bulan', 'required');
+		if ($this->form_validation->run() == false) {
+			redirect('admin/kasharian');
+		}else{
+			$data['title'] = 'Kas Harian';
+			$data['user'] = $this->db->get_where('user', ['email' =>
+			$this->session->userdata('email')])->row_array();
+
+			$bulan = $this->input->post('bulan');
+			$this->db->like('date', $bulan, 'after');
+			$data['kas'] = $this->db->get('kas_harian')->result_array();
+
+			$this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/topbar', $data);
+            $this->load->view('admin/kas', $data);
+            $this->load->view('templates/footer');
+		}
+	}
+
     public function hapus($id)
     {
         $this->db->where('id', $id);
@@ -285,6 +307,29 @@ class Admin extends CI_Controller
         $this->load->view('admin/payment', $data);
         $this->load->view('templates/footer');
     }
+
+	public function filterpayment()
+	{
+		$this->form_validation->set_rules('bulan', 'Bulan', 'required');
+		if ($this->form_validation->run() == false) {
+			redirect('admin/payment');
+		}else{
+			$data['title'] = 'Payment';
+			$data['user'] = $this->db->get_where('user', ['email' =>
+			$this->session->userdata('email')])->row_array();
+
+			$bulan = $this->input->post('bulan');
+			$this->db->like('date', $bulan, 'after');
+			$this->db->order_by('date', 'desc');
+			$data['data'] = $this->db->get('payment')->result();
+
+			$this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/topbar', $data);
+            $this->load->view('admin/payment', $data);
+            $this->load->view('templates/footer');
+		}
+	}
 
 	public function payment_ubah($id, $status)
 	{

@@ -186,7 +186,16 @@ class User extends CI_Controller
 		$data['title'] = 'Histori Pembayaran';
 		$data['user'] = $this->db->get_where('user', ['email' =>
 		$this->session->userdata('email')])->row_array();
-		$data['data'] = $this->db->get_where('payment', ['user_id' => $data['user']['id']])->result();
+
+		$this->form_validation->set_rules('bulan', 'Bulan', 'required');
+		if ($this->form_validation->run() == false) {
+			$data['data'] = $this->db->get_where('payment', ['user_id' => $data['user']['id']])->result();
+		}else{
+			$bulan = $this->input->post('bulan');
+			$this->db->like('date', $bulan, 'after');
+			$this->db->where('user_id',$data['user']['id']);
+			$data['data'] = $this->db->get('payment')->result();
+		}
 
 		$this->load->view('templates/header', $data);
 		$this->load->view('templates/sidebar', $data);

@@ -15,7 +15,26 @@
 
         			<?= $this->session->flashdata('message'); ?>
 
-        			<a href="" class="btn btn-primary mb-3" data-toggle="modal" data-target="#newDataModal"> Tambah Data Harian </a>
+        			<div class="row">
+        				<div class="col-md-6">
+        					<a href="" class="btn btn-primary mb-3" data-toggle="modal" data-target="#newDataModal"> Tambah Data Harian </a>
+        				</div>
+        				<div class="col-md-6">
+        					<form class="form-inline" method="POST" action="<?=base_url('admin/filterkas');?>">
+
+        						<label class="sr-only" for="bulan">Bulan</label>
+        						<div class="input-group mb-2 mr-sm-2">
+        							<div class="input-group-prepend">
+        								<div class="input-group-text"><i class="fa fa-calendar" aria-hidden="true"></i></div>
+        							</div>
+        							<input type="month" class="form-control" id="bulan" name="bulan">
+        						</div>
+
+        						<button type="submit" class="btn btn-primary mb-2">Filter</button>
+								<a href="<?=base_url('admin/kasharian');?>" class="btn btn-warning mb-2 ml-2">Reset</a>
+        					</form>
+        				</div>
+        			</div>
 
         			<table class="table table-hover" id="tabel">
         				<thead>
@@ -38,16 +57,16 @@
         						<tr>
         							<td> <?= $k['date']; ?> </td>
         							<td> <?= $k['ket']; ?></td>
-        							<td> Rp.<?=number_format($k['debet'], 0, ',', '.');?> </td>
-        							<td> Rp.<?=number_format($k['kredit'], 0, ',', '.');?> </td>
-        							<td> Rp.<?=number_format($k['jumlah'], 0, ',', '.');?> </td>
+        							<td> Rp.<?= number_format($k['debet'], 0, ',', '.'); ?> </td>
+        							<td> Rp.<?= number_format($k['kredit'], 0, ',', '.'); ?> </td>
+        							<td> Rp.<?= number_format($k['jumlah'], 0, ',', '.'); ?> </td>
         							<td>
 
         								<a href="<?= base_url(); ?>Admin/editKas/<?= $k['id']; ?>" class="badge badge-success"> Edit </a>
         								<a href="<?= base_url(); ?>Admin/hapus/<?= $k['id']; ?>" class="badge badge-danger" onclick="return confirm('Hapus data?');"> Delete </a>
         							</td>
         						</tr>
-								<?php 
+        						<?php
 								$jdebet += $k['debet'];
 								$jkredit += $k['kredit'];
 								$jsaldo = $k['jumlah'];
@@ -56,9 +75,9 @@
         				</tbody>
         				<tr>
         					<th scope="col-lg" colspan="2">Jumlah Saldo</th>
-							<th>Rp.<?=number_format($jdebet, 0, ',', '.');?></th>
-							<th>Rp.<?=number_format($jkredit, 0, ',', '.');?></th>
-							<th>Rp.<?=number_format($jsaldo, 0, ',', '.');?></th>
+        					<th>Rp.<?= number_format($jdebet, 0, ',', '.'); ?></th>
+        					<th>Rp.<?= number_format($jkredit, 0, ',', '.'); ?></th>
+        					<th>Rp.<?= number_format($jsaldo, 0, ',', '.'); ?></th>
         				</tr>
         			</table>
         		</div>
