@@ -23,7 +23,7 @@ class Koordinator extends CI_Controller
         $this->load->view('templates/footer');
     }
 
-    public function Report()
+    public function report()
     {
 		$data['bln'] = [
 			['id' => '01', 'bulan' => 'Januari'],
@@ -44,7 +44,7 @@ class Koordinator extends CI_Controller
         $this->session->userdata('email')])->row_array();
 
 		$this->form_validation->set_rules('bulan', 'Bulan', 'required');
-        $this->form_validation->set_rules('tahun', 'Tahun', 'required');
+        // $this->form_validation->set_rules('tahun', 'Tahun', 'required');
 
 		if ($this->form_validation->run() == false) {
 			$this->load->view('templates/header', $data);
@@ -53,11 +53,13 @@ class Koordinator extends CI_Controller
 			$this->load->view('koordinator/report', $data);
 			$this->load->view('templates/footer');
 		} else {
+			// print_r($this->input->post('bulan')); die;
 			$bulan = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+			$eks = explode("-", $this->input->post('bulan'));
 			$data['title'] = 'Laporan Keuangan';
-			$data['bulan'] = $this->input->post('bulan');
-			$b = (int) $this->input->post('bulan');
-        	$data['tahun'] = $this->input->post('tahun');
+			$data['bulan'] = $eks[1];
+			$b = (int) $eks[1];
+        	$data['tahun'] = $eks[0];
 			$data['bulannya'] = $bulan[$b];
 			$data['kas_masuk'] = $this->mreport->kas($data['bulan'], $data['tahun'], "masuk");
 			$data['kas_keluar'] = $this->mreport->kas($data['bulan'], $data['tahun'], "keluar");

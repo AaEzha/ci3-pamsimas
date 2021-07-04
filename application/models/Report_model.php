@@ -18,6 +18,13 @@ class Report_model extends CI_model
 
 	public function saldo_kas($bulan, $tahun, $tipe = "awal")
 	{
+		if($bulan == "01"){
+			$bulan = "12";
+			$tahun -= 1;
+		}else{
+			$bulan -= 1;
+		}
+
 		$this->db->select('jumlah as nominal');
 		$this->db->like('date', $tahun ."-". $bulan, 'after');
 		$this->db->order_by('date', 'asc');

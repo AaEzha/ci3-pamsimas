@@ -9,7 +9,7 @@
         			<p>Pilih bulan dan tahun dahulu</p>
         			<form action="" method="post">
         				<div class="row">
-        					<div class="col-md-2">
+        					<!-- <div class="col-md-2">
         						<select class="form-control" name="bulan" required>
 									<option value="">Pilih bulan</option>
 									<?php foreach($bln as $b): ?>
@@ -19,6 +19,9 @@
         					</div>
         					<div class="col-md-2">
         						<input type="text" class="form-control" placeholder="Tahun" name="tahun" required>
+        					</div> -->
+        					<div class="col-md-3">
+        						<input type="month" class="form-control" placeholder="Bulan dan Tahun" name="bulan" required>
         					</div>
 							<div class="col-md-2">
 								<button type="submit" class="btn btn-primary">Tampilkan</button>

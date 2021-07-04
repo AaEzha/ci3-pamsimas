@@ -116,6 +116,7 @@
         <!-- /.container-fluid -->
 
 		<button class="btn btn-primary m-5" onclick="printDiv('cetakyuk')" /><i class="fa fa-print" aria-hidden="true"></i> Print</button>
+		<a href="<?=base_url('koordinator/report');?>" class="btn btn-dark">Kembali</a>
 
         </div>
         <!-- End of Main Content -->
