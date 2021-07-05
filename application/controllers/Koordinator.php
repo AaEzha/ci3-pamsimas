@@ -3,28 +3,28 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Koordinator extends CI_Controller
 {
-    public function __construct()
-    {
-        parent::__construct();
-        is_logged_in();
-		$this->load->model('Report_model','mreport');
-    }
+	public function __construct()
+	{
+		parent::__construct();
+		is_logged_in();
+		$this->load->model('Report_model', 'mreport');
+	}
 
-    public function index()
-    {
-        $data['title'] = 'Dashboard';
-        $data['user'] = $this->db->get_where('user', ['email' =>
-        $this->session->userdata('email')])->row_array();
+	public function index()
+	{
+		$data['title'] = 'Dashboard';
+		$data['user'] = $this->db->get_where('user', ['email' =>
+		$this->session->userdata('email')])->row_array();
 
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/topbar', $data);
-        $this->load->view('koordinator/index', $data);
-        $this->load->view('templates/footer');
-    }
+		$this->load->view('templates/header', $data);
+		$this->load->view('templates/sidebar', $data);
+		$this->load->view('templates/topbar', $data);
+		$this->load->view('koordinator/index', $data);
+		$this->load->view('templates/footer');
+	}
 
-    public function report()
-    {
+	public function report()
+	{
 		$data['bln'] = [
 			['id' => '01', 'bulan' => 'Januari'],
 			['id' => '02', 'bulan' => 'Februari'],
@@ -39,12 +39,12 @@ class Koordinator extends CI_Controller
 			['id' => '11', 'bulan' => 'November'],
 			['id' => '12', 'bulan' => 'Desember'],
 		];
-        $data['title'] = 'Report';
-        $data['user'] = $this->db->get_where('user', ['email' =>
-        $this->session->userdata('email')])->row_array();
+		$data['title'] = 'Report';
+		$data['user'] = $this->db->get_where('user', ['email' =>
+		$this->session->userdata('email')])->row_array();
 
 		$this->form_validation->set_rules('bulan', 'Bulan', 'required');
-        // $this->form_validation->set_rules('tahun', 'Tahun', 'required');
+		// $this->form_validation->set_rules('tahun', 'Tahun', 'required');
 
 		if ($this->form_validation->run() == false) {
 			$this->load->view('templates/header', $data);
@@ -54,12 +54,12 @@ class Koordinator extends CI_Controller
 			$this->load->view('templates/footer');
 		} else {
 			// print_r($this->input->post('bulan')); die;
-			$bulan = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+			$bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 			$eks = explode("-", $this->input->post('bulan'));
 			$data['title'] = 'Laporan Keuangan';
 			$data['bulan'] = $eks[1];
 			$b = (int) $eks[1];
-        	$data['tahun'] = $eks[0];
+			$data['tahun'] = $eks[0];
 			$data['bulannya'] = $bulan[$b];
 			$data['kas_masuk'] = $this->mreport->kas($data['bulan'], $data['tahun'], "masuk");
 			$data['kas_keluar'] = $this->mreport->kas($data['bulan'], $data['tahun'], "keluar");
@@ -71,5 +71,5 @@ class Koordinator extends CI_Controller
 			$this->load->view('koordinator/report_output', $data);
 			$this->load->view('templates/footer');
 		}
-    }
+	}
 }
