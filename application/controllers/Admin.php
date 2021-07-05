@@ -222,7 +222,7 @@ class Admin extends CI_Controller
 
 	public function kas()
 	{
-		$this->db->order_by('id', 'asc');
+		$this->db->order_by('date', 'asc');
 		$data = $this->db->get('kas_harian')->result();
 		$jumlah = 0;
 		foreach($data as $d){
