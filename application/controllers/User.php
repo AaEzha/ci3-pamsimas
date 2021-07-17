@@ -298,6 +298,19 @@ class User extends CI_Controller
 
 				$denda = $this->tanggalan($untukTagihan, $this->input->post('date'));
 
+				// cek pembayaran dengan bulan yg sama
+				$this->db->where('bulan', $this->input->post('bulan'));
+				$this->db->where('tahun', $this->input->post('tahun'));
+				$this->db->where('status', 1);
+				$this->db->where('user_id', $this->session->user_id);
+				$d = $this->db->get('payment');
+				$cek = $d->num_rows();
+
+				if($cek > 0) {
+					$this->session->set_flashdata('message', 'Duplikat Pembayaran. Silahkan diperiksa kembali.');
+					return redirect('user/list');
+				}
+
 				$data = [
 					'user_id' => $this->session->user_id,
 					'name' => $this->input->post('name', true),
@@ -314,7 +327,7 @@ class User extends CI_Controller
 
 				$this->db->insert('payment', $data);
 
-				$this->session->set_flashdata('msg', 'Data berhasil disimpan');
+				$this->session->set_flashdata('message', 'Data berhasil disimpan');
 				return redirect('user/list');
 			}
 

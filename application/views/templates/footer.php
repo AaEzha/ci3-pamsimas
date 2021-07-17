@@ -88,21 +88,37 @@
   	});
 
   	$(function() {
-  		$("#datePembayaran").datepicker({
-  			minDate: "+0d",
+  		tgl = $("#datePembayaran").datepicker({
+  			maxDate: "+0d",
   			dateFormat: "yy-mm-dd"
   		});
+
+  		$('#tahun').change(function() {
+  			$('#bulan').removeAttr('readonly');
+  		})
+
+  		$('#bulan').change(function() {
+  			$('#datePembayaran').removeAttr('readonly');
+  			$('#bulan').prop('readonly', true);
+  			$('#tahun').prop('readonly', true);
+  			// tgl.datepicker("option", "minDate", getDate($('#tahun').val() + '-' + $('#bulan').val()));
+
+  		})
+
+  		var dateFormat = "yy-mm";
+
+  		function getDate(element) {
+  			var date;
+  			try {
+  				date = $.datepicker.parseDate(dateFormat, element.value);
+  			} catch (error) {
+  				date = null;
+  			}
+
+  			return date;
+  		}
   	});
 
-  	$('#tahun').change(function() {
-  		$('#bulan').removeAttr('readonly');
-  	})
-
-  	$('#bulan').change(function() {
-  		$('#datePembayaran').removeAttr('readonly');
-  		$('#bulan').prop('readonly', true);
-  		$('#tahun').prop('readonly', true);
-  	})
 
   	$('#datePembayaran').change(function() {
   		var tanggal = $('#datePembayaran').val();
@@ -158,6 +174,7 @@
   		document.body.innerHTML = originalContents;
   	}
   </script>
+  <?php $this->load->view($js ?? 'templates/blank'); ?>
   </body>
 
   </html>

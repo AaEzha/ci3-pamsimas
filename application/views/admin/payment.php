@@ -44,7 +44,7 @@
         					</tr>
         				</thead>
         				<tbody>
-        					<?php $i = 1; ?>
+        					<?php $i = 1; $total = 0; ?>
         					<?php $arrs = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']; ?>
         					<?php foreach ($data as $p) : ?>
         						<tr>
@@ -61,6 +61,7 @@
         								<?php if ($p->status == 0) {
 											echo "Menunggu";
 										} else if ($p->status == 1) {
+											$total += $p->tagihan;
 											echo "Diterima";
 										} else {
 											echo "Ditolak";
@@ -70,18 +71,25 @@
         							<td>
         								<?php if ($p->status == 0) { ?>
         									<a class="btn btn-primary btn-sm" href="<?= base_url('admin/payment_ubah/' . $p->id . '/' . md5('1')); ?>" role="button" title="terima pembayaran"><i class="fa fa-check" aria-hidden="true"></i></a>
-        									<a class="btn btn-danger btn-sm" href="<?= base_url('admin/payment_ubah/' . $p->id . '/' . md5('3')); ?>" role="button" title="tolak pembayaran"><i class="fa fa-trash" aria-hidden="true"></i></a>
+        									<a class="btn btn-danger btn-sm" href="#" role="button" title="tolak pembayaran" onclick="batal(<?= $p->id; ?>)"><i class="fa fa-trash" aria-hidden="true"></i></a>
         								<?php } else if ($p->status == 1) { ?>
-        									<a class="btn btn-danger btn-sm" href="<?= base_url('admin/payment_ubah/' . $p->id . '/' . md5('3')); ?>" role="button" title="tolak pembayaran"><i class="fa fa-trash" aria-hidden="true"></i></a>
-        									<a class="btn btn-dark btn-sm" href="<?= base_url('admin/payment_ubah/' . $p->id . '/' . md5('0')); ?>" role="button" title="tahan pembayaran"><i class="fa fa-recycle" aria-hidden="true"></i></a>
+        									<!-- <a class="btn btn-danger btn-sm" href="#" role="button" title="tolak pembayaran" onclick="batal(<?= $p->id; ?>)"><i class="fa fa-trash" aria-hidden="true"></i></a>
+        									<a class="btn btn-dark btn-sm" href="<?= base_url('admin/payment_ubah/' . $p->id . '/' . md5('0')); ?>" role="button" title="tahan pembayaran"><i class="fa fa-recycle" aria-hidden="true"></i></a> -->
         								<?php } else if ($p->status == 3) { ?>
         									<a class="btn btn-dark btn-sm" href="<?= base_url('admin/payment_ubah/' . $p->id . '/' . md5('0')); ?>" role="button" title="tahan pembayaran"><i class="fa fa-recycle" aria-hidden="true"></i></a>
         								<?php } ?>
+        								<!-- <?= base_url('admin/payment_ubah/' . $p->id . '/' . md5('3')); ?> -->
         							</td>
         						</tr>
         						<?php $i++; ?>
         					<?php endforeach; ?>
         				</tbody>
+						<tfooter>
+							<tr>
+								<th colspan="7" class="text-right">Total Diterima</th>
+								<th colspan="4"> Rp <?= number_format($total, 0, ',', '.'); ?>,-</th>
+							</tr>
+						</tfooter>
         			</table>
         		</div>
         	</div>

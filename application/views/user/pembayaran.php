@@ -12,14 +12,18 @@
 				</div>
 			<?php endif; ?>
 
-			<?= $this->session->flashdata('message'); ?>
+			<?php if ($this->session->flashdata('message')){ ?>
+				<div class="alert alert-danger" role="alert">
+					<?= $this->session->flashdata('message') ?>
+				</div>
+			<?php } ?>
 
 			<form action="<?= base_url('user/pembayaran'); ?>" method="post" enctype="multipart/form-data">
 
 				<div class="form-group">
 					<label for="name" class="col-sm-4 col-form-label">Nama Pelanggan</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" id="name" name="name" value="<?= $user['name']; ?>">
+						<input type="text" class="form-control" id="name" name="name" value="<?= $user['name']; ?>" readonly>
 						<?= form_error('name', '<small class="text-danger pl-3">', '</small>'); ?>
 					</div>
 				</div>
@@ -27,7 +31,7 @@
 				<div class="form-group">
 					<label for="alamat" class="col-sm-4 col-form-label">Alamat</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" id="alamat" name="alamat" value="<?= $pelanggan['alamat']; ?>">
+						<input type="text" class="form-control" id="alamat" name="alamat" value="<?= $pelanggan['alamat']; ?>" readonly>
 						<?= form_error('alamat', '<small class="text-danger pl-3">', '</small>'); ?>
 					</div>
 				</div>

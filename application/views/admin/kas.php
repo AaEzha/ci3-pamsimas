@@ -20,7 +20,7 @@
         					<a href="" class="btn btn-primary mb-3" data-toggle="modal" data-target="#newDataModal"> Tambah Data Harian </a>
         				</div>
         				<div class="col-md-6">
-        					<form class="form-inline" method="POST" action="<?=base_url('admin/filterkas');?>">
+        					<form class="form-inline" method="POST" action="<?= base_url('admin/filterkas'); ?>">
 
         						<label class="sr-only" for="bulan">Bulan</label>
         						<div class="input-group mb-2 mr-sm-2">
@@ -31,7 +31,7 @@
         						</div>
 
         						<button type="submit" class="btn btn-primary mb-2">Filter</button>
-								<a href="<?=base_url('admin/kasharian');?>" class="btn btn-warning mb-2 ml-2">Reset</a>
+        						<a href="<?= base_url('admin/kasharian'); ?>" class="btn btn-warning mb-2 ml-2">Reset</a>
         					</form>
         				</div>
         			</div>
@@ -104,17 +104,24 @@
         				<div class="modal-body">
 
         					<div class="form-group">
+        						<label for="date">Tanggal</label>
         						<input type="date" class="form-control" id="date" name="date" placeholder="Date">
         					</div>
 
         					<div class="form-group">
         						<input type="text" class="form-control" id="ket" name="ket" placeholder="Keterangan">
         					</div>
+
         					<div class="form-group">
-        						<input type="text" class="form-control" id="debet" name="debet" placeholder="Debet">
+        						<label for="jenis">Jenis Kas</label>
+        						<select class="form-control" name="jenis" id="jenis">
+        							<option value="debet">Debet</option>
+        							<option value="kredit">Kredit</option>
+        						</select>
         					</div>
+
         					<div class="form-group">
-        						<input type="text" class="form-control" id="kredit" name="kredit" placeholder="Kredit">
+        						<input type="text" class="form-control" id="nominal" name="nominal" placeholder="Nominal, contoh: 1500000">
         					</div>
 
         				</div>

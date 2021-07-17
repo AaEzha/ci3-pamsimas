@@ -66,6 +66,14 @@
         			</div>
 
         			<div class="form-group row">
+        				<label for="alamat2" class="col-sm-3 col-form-label">Alamat</label>
+        				<div class="col-sm-9">
+        					<input type="text" class="form-control" id="alamat2" name="alamat2" value="<?= $pelanggan['address'] ?? "" ?>" readonly>
+        					<?= form_error('alamat2', '<small class="text-danger pl-3">', '</small>'); ?>
+        				</div>
+        			</div>
+
+        			<div class="form-group row">
         				<label for="pekerjaan" class="col-sm-3 col-form-label">Pekerjaan</label>
         				<div class="col-sm-9">
         					<input type="text" class="form-control" id="pekerjaan" name="pekerjaan" value="<?= $pelanggan['pekerjaan'] ?? "" ?>">

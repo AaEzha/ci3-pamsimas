@@ -6,8 +6,8 @@
 
        	<div class="row">
        		<div class="col-md-6">
-				<a name="" id="" class="btn btn-success mb-3" href="<?= base_url('user/pembayaran'); ?>" role="button"><i class="fa fa-plus" aria-hidden="true"></i> Input Data Pembayaran</a>
-			</div>
+       			<a name="" id="" class="btn btn-success mb-3" href="<?= base_url('user/pembayaran'); ?>" role="button"><i class="fa fa-plus" aria-hidden="true"></i> Input Data Pembayaran</a>
+       		</div>
        		<div class="col-md-6">
        			<form class="form-inline" method="POST" action="<?= base_url('user/list'); ?>">
 
@@ -28,7 +28,11 @@
        	<div class="row">
        		<div class="col-lg-12">
 
-       			<?= $this->session->flashdata('message'); ?>
+       			<?php if ($this->session->flashdata('message')) { ?>
+       				<div class="alert alert-primary" role="alert">
+       					<?= $this->session->flashdata('message') ?>
+       				</div>
+       			<?php } ?>
 
        			<table class="table table-hover" id="tabel">
        				<thead>
@@ -47,13 +51,13 @@
        				</thead>
        				<tbody>
        					<?php $i = 1; ?>
-       					<?php $arrs = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']; ?>
+       					<?php $arrs = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']; ?>
        					<?php foreach ($data as $p) : ?>
        						<tr>
        							<th scope="row"><?= $i; ?> </th>
        							<td> <?= $p->name; ?> </td>
        							<td> <?= $p->alamat; ?> </td>
-       							<td> <?= $arrs[$p->bulan + 1]; ?> <?= $p->tahun; ?> </td>
+       							<td> <?= $arrs[$p->bulan]; ?> <?= $p->tahun; ?> </td>
        							<td> <?= $p->date; ?> </td>
        							<td> <?= number_format($p->biaya, 0, ',', '.'); ?> </td>
        							<td> <?= number_format($p->denda, 0, ',', '.'); ?> </td>
@@ -66,6 +70,8 @@
 											echo "Diterima";
 										} else {
 											echo "Ditolak";
+											echo "<br>";
+											echo "<small>(".$p->alasan.")</small>";
 										}
 										?>
        							</td>
