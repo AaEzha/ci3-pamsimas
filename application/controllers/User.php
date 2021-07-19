@@ -44,6 +44,7 @@ class User extends CI_Controller
 		$this->form_validation->set_rules('name', 'Full Name', 'required|trim');
 		$this->form_validation->set_rules('alamat', 'Alamat', 'required|trim');
 		$this->form_validation->set_rules('pekerjaan', 'Pekerjaan', 'required|trim');
+		$this->form_validation->set_rules('nik', 'NIK', 'required|trim');
 
 		if ($this->form_validation->run() == false) {
 			$this->load->view('templates/header', $data);
@@ -54,6 +55,7 @@ class User extends CI_Controller
 		} else {
 			$name = $this->input->post('name');
 			$alamat = $this->input->post('alamat');
+			$nik = $this->input->post('nik');
 			$pekerjaan = $this->input->post('pekerjaan');
 
 			//cek data jika ada gambar yang di upload
@@ -85,6 +87,7 @@ class User extends CI_Controller
 			// tabel pelanggan
 			$this->db->set('pekerjaan', $pekerjaan);
 			$this->db->set('alamat', $alamat);
+			$this->db->set('nik', $nik);
 			$this->db->where('email', $this->session->userdata('email'));
 			$this->db->update('pelanggan');
 

@@ -4,7 +4,7 @@
         	<!-- Page Heading -->
         	<h1 class="h3 mb-4 text-gray-800"><?= $title; ?> </h1>
 
-			<?= $this->session->flashdata('message'); ?>
+        	<?= $this->session->flashdata('message'); ?>
 
         	<div class="row">
         		<div class="col-lg-6">
@@ -52,25 +52,21 @@
         			<div class="form-group row">
         				<label for="nik" class="col-sm-3 col-form-label">No. NIK</label>
         				<div class="col-sm-9">
-        					<input type="text" class="form-control" id="nik" name="nik" value="<?= $pelanggan['nik'] ?? "" ?>" readonly>
+        					<input type="text" class="form-control" id="nik" name="nik" value="<?= $pelanggan['nik'] ?? "" ?>" required>
         					<?= form_error('nik', '<small class="text-danger pl-3">', '</small>'); ?>
         				</div>
         			</div>
 
         			<div class="form-group row">
-        				<label for="alamat" class="col-sm-3 col-form-label">Alamat Lengkap</label>
-        				<div class="col-sm-9">
-        					<input type="text" class="form-control" id="alamat" name="alamat" value="<?= $pelanggan['alamat'] ?? "" ?>">
-        					<?= form_error('alamat', '<small class="text-danger pl-3">', '</small>'); ?>
-        				</div>
-        			</div>
-
-        			<div class="form-group row">
-        				<label for="alamat2" class="col-sm-3 col-form-label">Alamat</label>
-        				<div class="col-sm-9">
-        					<input type="text" class="form-control" id="alamat2" name="alamat2" value="<?= $pelanggan['address'] ?? "" ?>" readonly>
-        					<?= form_error('alamat2', '<small class="text-danger pl-3">', '</small>'); ?>
-        				</div>
+        				<label for="alamat" class="col-sm-3 col-form-label">Alamat</label>
+						<div class="col-sm-9">
+							<select class="form-control" name="alamat" id="alamat" required>
+								<option value="">Pilih Alamat</option>
+								<option value="Pandam" <?=(@$pelanggan['alamat'] == "Pandam") ? "selected":"";?>>Pandam</option>
+								<option value="Kp.Ambacang" <?=(@$pelanggan['alamat'] == "Kp.Ambacang") ? "selected":"";?>>Kp.Ambacang</option>
+							</select>
+							<?= form_error('alamat2', '<small class="text-danger pl-3">', '</small>'); ?>
+						</div>
         			</div>
 
         			<div class="form-group row">

@@ -83,9 +83,9 @@ class Auth extends CI_Controller
         $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]', [
             'is_unique' => 'This email has already registered!'
         ]);
-        $this->form_validation->set_rules('nik', 'NIK', 'required|trim|is_unique[pelanggan.nik]', [
-            'is_unique' => 'This NIK has already registered!'
-        ]);
+        // $this->form_validation->set_rules('nik', 'NIK', 'required|trim|is_unique[pelanggan.nik]', [
+        //     'is_unique' => 'This NIK has already registered!'
+        // ]);
         $this->form_validation->set_rules('password1', 'Password', 'required|trim|min_length[5]|matches[password2]', [
             'matches' => 'Password tidak sesuai!',
             'min_length' => 'Password terlalu pendek!'
@@ -115,8 +115,6 @@ class Auth extends CI_Controller
 			$data = [
 				'email' => htmlspecialchars($this->input->post('email', true)),
 				'name' => htmlspecialchars($this->input->post('name', true)),
-				'nik' => htmlspecialchars($this->input->post('nik', true)),
-				'alamat' => '',
 				'pekerjaan' => ''
 			];
 			$this->db->insert('pelanggan', $data);
