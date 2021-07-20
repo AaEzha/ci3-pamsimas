@@ -328,6 +328,57 @@ class Admin extends CI_Controller
 		$this->db->where('id', $this->input->post('vid'));
 		$this->db->update('payment');
 
+		// ambil data payment
+		$this->db->where('id', $this->input->post('vid'));
+		$data = $this->db->get('payment');
+		$r = $data->row();
+		$user_id = $r->user_id;
+
+		// ambil data user
+		$this->db->where('id', $user_id);
+		$data = $this->db->get('user');
+		$r = $data->row();
+
+		// Konfigurasi email
+		$config = [
+			'mailtype'  => 'html',
+			'charset'   => 'utf-8',
+			'protocol'  => 'smtp',
+			'smtp_host' => 'smtp.gmail.com',
+			'smtp_user' => 'yollaazura@gmail.com',  // Email gmail
+			'smtp_pass'   => 'azurasasmita',  // Password gmail
+			'smtp_crypto' => 'ssl',
+			'smtp_port'   => 465,
+			'crlf'    => "\r\n",
+			'newline' => "\r\n"
+		];
+
+
+		// Load library email dan konfigurasinya
+		$this->load->library('email', $config);
+		$this->email->initialize($config);
+
+		// Email dan nama pengirim
+		$this->email->from('no-reply@pamsimas.com', 'Pamsimas Nagari V Koto');
+
+		// Email penerima
+		$this->email->to(htmlspecialchars($r->email)); // Ganti dengan email tujuan
+
+		// Subject email
+		$this->email->subject('Pembayaran Anda Ditolak | Pamsimas Nagari V Koto');
+
+		// Isi email
+		$this->email->message("Pembayaran Anda ditolak dengan alasan " . $this->input->post('alasan'));
+
+		// Tampilkan pesan sukses atau error
+		if ($this->email->send()) {
+			$this->session->set_flashdata('message', '<div class="alert alert-success" 
+			role="alert"> Email berhasil dikirim</div>');
+		} else {
+			$this->session->set_flashdata('message', '<div class="alert alert-success" 
+			role="alert"> Email gagal dikirim!</div>');
+		}
+
 		redirect('admin/payment');
 	}
 
@@ -356,13 +407,13 @@ class Admin extends CI_Controller
 
 	public function payment_ubah($id, $status)
 	{
-		
+
 		$this->db->where('id', $id);
 		if (md5("1") == $status) {
 			//ambil data payment
-			$q = $this->db->query("select * from payment where id='".$id."'");
+			$q = $this->db->query("select * from payment where id='" . $id . "'");
 			$data = $q->row();
-			
+
 			$d = [
 				'date' => date('Y-m-d'),
 				'ket' => 'Pembayaran Air a/n ' . $data->name . ' bulan ' . $data->bulan . ' tahun ' . $data->tahun . ' pada ' . $data->date,
@@ -374,18 +425,73 @@ class Admin extends CI_Controller
 
 			$this->db->set('alasan', null);
 			$this->db->set('status', 1);
+			$this->db->update('payment');
+
+
+			// ambil data payment
+			$this->db->where('id', $id);
+			$data = $this->db->get('payment');
+			$r = $data->row();
+			$user_id = $r->user_id;
+
+			// ambil data user
+			$this->db->where('id', $user_id);
+			$data = $this->db->get('user');
+			$r = $data->row();
+
+			// Konfigurasi email
+			$config = [
+				'mailtype'  => 'html',
+				'charset'   => 'utf-8',
+				'protocol'  => 'smtp',
+				'smtp_host' => 'smtp.gmail.com',
+				'smtp_user' => 'yollaazura@gmail.com',  // Email gmail
+				'smtp_pass'   => 'azurasasmita',  // Password gmail
+				'smtp_crypto' => 'ssl',
+				'smtp_port'   => 465,
+				'crlf'    => "\r\n",
+				'newline' => "\r\n"
+			];
+
+
+			// Load library email dan konfigurasinya
+			$this->load->library('email', $config);
+			$this->email->initialize($config);
+
+			// Email dan nama pengirim
+			$this->email->from('no-reply@pamsimas.com', 'Pamsimas Nagari V Koto');
+
+			// Email penerima
+			$this->email->to(htmlspecialchars($r->email)); // Ganti dengan email tujuan
+
+			// Subject email
+			$this->email->subject('Pembayaran Anda Diterima | Pamsimas Nagari V Koto');
+
+			// Isi email
+			$this->email->message("Terima kasih telah membayar tagihan Anda tepat waktu");
+
+			// Tampilkan pesan sukses atau error
+			if ($this->email->send()) {
+				$this->session->set_flashdata('message', '<div class="alert alert-success" 
+			role="alert"> Email berhasil dikirim</div>');
+			} else {
+				$this->session->set_flashdata('message', '<div class="alert alert-success" 
+			role="alert"> Email gagal dikirim!</div>');
+			}
 		} elseif (md5("0") == $status) {
 			$this->db->set('alasan', null);
 			$this->db->set('status', 0);
+			$this->db->update('payment');
 		} elseif (md5("2") == $status) {
 			$this->db->set('status', 2);
+			$this->db->update('payment');
 		} elseif (md5("3") == $status) {
 			$this->db->set('status', 3);
+			$this->db->update('payment');
 		} else {
 			return redirect('admin/payment');
 		}
 
-		$this->db->update('payment');
 
 		redirect('admin/payment');
 	}

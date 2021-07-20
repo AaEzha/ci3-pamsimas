@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 19, 2021 at 02:23 AM
+-- Generation Time: Jul 21, 2021 at 01:44 AM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.4.13
 
@@ -50,7 +50,8 @@ INSERT INTO `kas_harian` (`id`, `date`, `ket`, `debet`, `kredit`, `jumlah`) VALU
 (24, '2021-07-17', 'Tambah Baru', '0', '1000000', '445000'),
 (25, '2021-07-17', 'Au', '500000', '0', '945000'),
 (26, '2021-07-17', 'Pembayaran Air a/n Ega Melgia Sasmita bulan 3 tahun 2021 pada 2021-07-01', '247000', '0', '1192000'),
-(27, '2021-07-17', 'Pembayaran Air a/n Ega Melgia Sasmita bulan 1 tahun 2021 pada 2021-07-17', '397000', '0', '');
+(27, '2021-07-17', 'Pembayaran Air a/n Ega Melgia Sasmita bulan 1 tahun 2021 pada 2021-07-17', '397000', '0', ''),
+(28, '2021-07-21', 'Pembayaran Air a/n Reza bulan 8 tahun 2021 pada 2021-07-21', '15000', '0', '');
 
 -- --------------------------------------------------------
 
@@ -80,7 +81,9 @@ CREATE TABLE `payment` (
 
 INSERT INTO `payment` (`id`, `user_id`, `name`, `alamat`, `bulan`, `tahun`, `date`, `biaya`, `denda`, `tagihan`, `bukti`, `status`, `alasan`) VALUES
 (1, 28, 'Ega Melgia Sasmita', 'Kp. Ambacang', 1, 2021, '2021-07-17', '15000', '382000', '397000', 'payments/1272ce89b9caaf74d086080df96c2b0d.jpeg', 1, NULL),
-(2, 28, 'Ega Melgia Sasmita', 'Kp. Ambacang', 3, 2021, '2021-07-01', '15000', '232000', '247000', 'payments/32872d2b555e4b698f2a98c9f0e4fcec.jpeg', 1, NULL);
+(2, 28, 'Ega Melgia Sasmita', 'Kp. Ambacang', 3, 2021, '2021-07-01', '15000', '232000', '247000', 'payments/32872d2b555e4b698f2a98c9f0e4fcec.jpeg', 1, NULL),
+(4, 38, 'Reza', 'Pandam', 8, 2021, '2021-07-21', '15000', '0', '15000', 'payments/8e2d2caa0b0fedaedc1aea8ea05b1be4.jpeg', 1, NULL),
+(5, 38, 'Reza', 'Pandam', 8, 2021, '2021-07-21', '15000', '0', '15000', 'payments/4897b8d395e427b63796e26aeed9e409.jpeg', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -93,7 +96,7 @@ CREATE TABLE `pelanggan` (
   `email` varchar(128) NOT NULL,
   `name` varchar(128) NOT NULL,
   `nik` varchar(128) DEFAULT NULL,
-  `alamat` enum('Pandam','Kp.Ambacang') DEFAULT 'Pandam',
+  `alamat` enum('Pandam','Kp.Ambacang') DEFAULT NULL,
   `pekerjaan` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -105,7 +108,8 @@ INSERT INTO `pelanggan` (`id`, `email`, `name`, `nik`, `alamat`, `pekerjaan`) VA
 (13, 'yollaazura@gmail.com', 'Yolla Azura Sasmita', '0800987678900011', 'Pandam', 'Pengusaha'),
 (14, 'member@gmail.com', 'Ega Melgia Sasmita', '0800987678900010', 'Pandam', 'Pegawai Negeri'),
 (15, 'admin@gmail.com', 'Yolla Azura Sasmita', '0800987678900011', 'Pandam', 'Pengusaha'),
-(17, 'pelanggan@gmail.com', 'Pelanggan', '12321', 'Kp.Ambacang', 'Pegawai Swasta');
+(19, 'pelanggan@gmail.com', 'Pelanggan', NULL, NULL, ''),
+(23, 'aaezha@gmail.com', 'Reza', '12', 'Pandam', 'Jobnya');
 
 -- --------------------------------------------------------
 
@@ -121,6 +125,7 @@ CREATE TABLE `user` (
   `password` varchar(256) NOT NULL,
   `role_id` int(11) NOT NULL,
   `is_active` int(1) NOT NULL,
+  `kode` varchar(50) DEFAULT NULL,
   `date_created` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -128,12 +133,13 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `name`, `email`, `image`, `password`, `role_id`, `is_active`, `date_created`) VALUES
-(27, 'Yolla Azura Sasmita, S.Kom.', 'yollaazura@gmail.com', 'rsz_1img_8037_mr1617100388892-min.jpg', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, 1619961876),
-(28, 'Ega Melgia Sasmita', 'member@gmail.com', '6edefd6c41bc308fbdbf662abe9164f8.png', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 2, 1, 1619962931),
-(29, 'Ferdi Febriansah', 'koor@gmail.com', 'default.jpg', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 3, 1, 1620314884),
-(30, 'Yolla Azura Sasmita, S.Kom.', 'admin@gmail.com', 'rsz_1img_8037_mr1617100388892-min.jpg', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, 1619961876),
-(32, 'Pelanggan', 'pelanggan@gmail.com', 'default.jpg', '$2y$10$aMarRmwbP2n6IY/..3veWOJXg/i2dpdyUIZjbFD1W.mhLDL5HAbky', 2, 1, 1626653616);
+INSERT INTO `user` (`id`, `name`, `email`, `image`, `password`, `role_id`, `is_active`, `kode`, `date_created`) VALUES
+(27, 'Yolla Azura Sasmita, S.Kom.', 'yollaazura@gmail.com', 'rsz_1img_8037_mr1617100388892-min.jpg', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, NULL, 1619961876),
+(28, 'Ega Melgia Sasmita', 'member@gmail.com', '6edefd6c41bc308fbdbf662abe9164f8.png', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 2, 1, NULL, 1619962931),
+(29, 'Ferdi Febriansah', 'koor@gmail.com', 'default.jpg', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 3, 1, NULL, 1620314884),
+(30, 'Yolla Azura Sasmita, S.Kom.', 'admin@gmail.com', 'rsz_1img_8037_mr1617100388892-min.jpg', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, NULL, 1619961876),
+(34, 'Pelanggan', 'pelanggan@gmail.com', 'default.jpg', '$2y$10$8bHDRCikM/cbjmO4pSsQLuc/fPtIpMZEYti4oaCWWCOGm5MmFD5ue', 2, 1, NULL, 1626654429),
+(38, 'Reza', 'aaezha@gmail.com', 'b42b320d206ab31eb0075fbade6b1501.jpeg', '$2y$10$g4PPk7VNsk7uCNqb0WCBmeD5goyIQHBsK4iWXOZj.WIKnpiI0u96a', 2, 1, 'd1f91f42cd61e7166aad633a1e3f0af2', 1626823227);
 
 -- --------------------------------------------------------
 
@@ -297,25 +303,25 @@ ALTER TABLE `user_sub_menu`
 -- AUTO_INCREMENT for table `kas_harian`
 --
 ALTER TABLE `kas_harian`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `pelanggan`
 --
 ALTER TABLE `pelanggan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `user_access_menu`
