@@ -129,7 +129,7 @@ class Auth extends CI_Controller
 				'protocol'  => 'smtp',
 				'smtp_host' => 'smtp.gmail.com',
 				'smtp_user' => 'yollaazura@gmail.com',  // Email gmail
-				'smtp_pass'   => 'azurasasmita',  // Password gmail
+				'smtp_pass'   => 'dvgjwkiotopxuyas',  // Password gmail
 				'smtp_crypto' => 'ssl',
 				'smtp_port'   => 465,
 				'crlf'    => "\r\n",

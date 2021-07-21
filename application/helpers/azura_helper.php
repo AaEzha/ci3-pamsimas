@@ -33,3 +33,14 @@ function check_access($role_id, $menu_id)
         return "checked='checked'";
     }
 }
+
+function tanggal($tgl)
+{
+	$tgl = explode("-", $tgl);
+	$tahun = $tgl[0];
+	$bulan = (int) $tgl[1];
+
+	$arr = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+
+	return $arr[$bulan] . " " . $tahun;
+}

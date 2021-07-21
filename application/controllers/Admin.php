@@ -346,7 +346,7 @@ class Admin extends CI_Controller
 			'protocol'  => 'smtp',
 			'smtp_host' => 'smtp.gmail.com',
 			'smtp_user' => 'yollaazura@gmail.com',  // Email gmail
-			'smtp_pass'   => 'azurasasmita',  // Password gmail
+			'smtp_pass'   => 'dvgjwkiotopxuyas',  // Password gmail
 			'smtp_crypto' => 'ssl',
 			'smtp_port'   => 465,
 			'crlf'    => "\r\n",
@@ -446,7 +446,7 @@ class Admin extends CI_Controller
 				'protocol'  => 'smtp',
 				'smtp_host' => 'smtp.gmail.com',
 				'smtp_user' => 'yollaazura@gmail.com',  // Email gmail
-				'smtp_pass'   => 'azurasasmita',  // Password gmail
+				'smtp_pass'   => 'dvgjwkiotopxuyas',  // Password gmail
 				'smtp_crypto' => 'ssl',
 				'smtp_port'   => 465,
 				'crlf'    => "\r\n",
@@ -494,5 +494,71 @@ class Admin extends CI_Controller
 
 
 		redirect('admin/payment');
+	}
+
+	public function email()
+	{
+		$this->form_validation->set_rules('pesan', 'Name', 'required|trim');
+		if ($this->form_validation->run() == true) {
+			// ambil data user
+			$this->db->where('role_id', 2);
+			$this->db->where('is_active', 1);
+			$data = $this->db->get('user');
+			$r = $data->result();
+
+			// Konfigurasi email
+			$config = [
+				'mailtype'  => 'html',
+				'charset'   => 'utf-8',
+				'protocol'  => 'smtp',
+				'smtp_host' => 'smtp.gmail.com',
+				'smtp_user' => 'yollaazura@gmail.com',  // Email gmail
+				'smtp_pass'   => 'dvgjwkiotopxuyas',  // Password gmail
+				'smtp_crypto' => 'ssl',
+				'smtp_port'   => 465,
+				'crlf'    => "\r\n",
+				'newline' => "\r\n"
+			];
+
+
+			// Load library email dan konfigurasinya
+			$this->load->library('email', $config);
+			$this->email->initialize($config);
+
+			$no = 1;
+
+			foreach ($r as $d) :
+
+				// Email dan nama pengirim
+				$this->email->from('no-reply@pamsimas.com', 'Pamsimas Nagari V Koto');
+
+				// Email penerima
+				$this->email->to(htmlspecialchars($d->email)); // Ganti dengan email tujuan
+
+				// Subject email
+				$this->email->subject('Notifikasi Email | Pamsimas Nagari V Koto');
+
+				// Isi email
+				$this->email->message($this->input->post('pesan'));
+
+				// Tampilkan pesan sukses atau error
+				if ($this->email->send()) {
+					$no++;
+				} else {
+					$no--;
+				}
+				
+			endforeach;
+			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert"> '.$no.' Email berhasil dikirim</div>');
+
+			redirect('admin/email');
+		} else {
+			$data['title'] = 'Notifikasi Email';
+			$this->load->view('templates/header', $data);
+			$this->load->view('templates/sidebar', $data);
+			$this->load->view('templates/topbar', $data);
+			$this->load->view('admin/email', $data);
+			$this->load->view('templates/footer');
+		}
 	}
 }
