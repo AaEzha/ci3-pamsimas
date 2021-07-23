@@ -19,6 +19,7 @@
                                <th scope="col">NIK</th>
                                <th scope="col">Alamat</th>
                                <th scope="col">Pekerjaan</th>
+                               <th scope="col">Tanggal Daftar</th>
                                <th scope="col">Action</th>
                            </tr>
                        </thead>
@@ -32,6 +33,7 @@
                                    <td> <?= $p['nik']; ?> </td>
                                    <td> <?= $p['alamat']; ?> </td>
                                    <td> <?= $p['pekerjaan']; ?> </td>
+                                   <td> <?= date('d F Y', $p['date_created']); ?> </td>
                                    <td><a href="<?= base_url(); ?>Admin/editpelanggan/<?= $p['id']; ?>" class="badge badge-success"> Edit </a>
                                        <a href="<?= base_url(); ?>Admin/hapuspelanggan/<?= $p['id']; ?>" class="badge badge-danger" onclick="return confirm('Hapus data?');" class=" badge badge-danger"> Delete </a>
                                    </td>

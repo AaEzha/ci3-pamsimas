@@ -33,6 +33,7 @@
         						<th scope="col-lg">No.</th>
         						<th scope="col-lg">Nama</th>
         						<th scope="col-lg">Alamat</th>
+								<th scope="col">Tanggal Daftar</th>
         						<th scope="col">Tagihan</th>
         						<th scope="col">Tanggal Pembayaran</th>
         						<th scope="col">Biaya per Bulan</th>
@@ -45,13 +46,14 @@
         				</thead>
         				<tbody>
         					<?php $i = 1; $total = 0; ?>
-        					<?php $arrs = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']; ?>
+        					<?php $arrs = ['','Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']; ?>
         					<?php foreach ($data as $p) : ?>
         						<tr>
         							<th scope="row"><?= $i; ?> </th>
         							<td> <?= $p->name; ?> </td>
         							<td> <?= $p->alamat; ?> </td>
-        							<td> <?= $arrs[$p->bulan + 1]; ?> <?= $p->tahun; ?> </td>
+									<td> <?= date('d F Y', $p->date_created); ?> </td>
+        							<td> <?= $arrs[$p->bulan]; ?> <?= $p->tahun; ?> </td>
         							<td> <?= $p->date; ?> </td>
         							<td> <?= number_format($p->biaya, 0, ',', '.'); ?> </td>
         							<td> <?= number_format($p->denda, 0, ',', '.'); ?> </td>
