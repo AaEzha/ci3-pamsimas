@@ -48,11 +48,15 @@
         					<?php $i = 1; $total = 0; ?>
         					<?php $arrs = ['','Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']; ?>
         					<?php foreach ($data as $p) : ?>
+								<?php
+								$this->db->where('id', $p->user_id);
+								$user = $this->db->get('user')->row();
+								?>
         						<tr>
         							<th scope="row"><?= $i; ?> </th>
         							<td> <?= $p->name; ?> </td>
         							<td> <?= $p->alamat; ?> </td>
-									<td> <?= date('d F Y', $p->date_created); ?> </td>
+									<td> <?= date('d F Y', $user->date_created); ?> </td>
         							<td> <?= $arrs[$p->bulan]; ?> <?= $p->tahun; ?> </td>
         							<td> <?= $p->date; ?> </td>
         							<td> <?= number_format($p->biaya, 0, ',', '.'); ?> </td>
