@@ -126,7 +126,7 @@ class Admin extends CI_Controller
 		}
 
 		$this->session->set_flashdata('message', '<div class="alert alert-success" 
-        role="alert"> Access Changed!</div>');
+        role="alert"> Akses berhasil diubah!</div>');
 	}
 
 
@@ -437,7 +437,22 @@ class Admin extends CI_Controller
 			// ambil data user
 			$this->db->where('id', $user_id);
 			$data = $this->db->get('user');
-			$r = $data->row();
+			$ru = $data->row();
+
+			// hapus tagihan lama
+			$this->db->where('user_id', $user_id);
+			$this->db->delete('tagihan');
+
+			// buat tagihan baru
+			$bulan = $r->bulan + 1;
+			$tahun = ($bulan == 13) ? $r->tahun + 1 : $r->tahun;
+			$bulan = ($bulan == 13) ? 1 : $bulan;
+			$data = [
+				'user_id' => $user_id,
+				'bulan' => $bulan,
+				'tahun' => $tahun
+			];
+			$this->db->insert('tagihan', $data);
 
 			// Konfigurasi email
 			$config = [
@@ -462,7 +477,7 @@ class Admin extends CI_Controller
 			$this->email->from('no-reply@pamsimas.com', 'Pamsimas Nagari V Koto');
 
 			// Email penerima
-			$this->email->to(htmlspecialchars($r->email)); // Ganti dengan email tujuan
+			$this->email->to(htmlspecialchars($ru->email)); // Ganti dengan email tujuan
 
 			// Subject email
 			$this->email->subject('Pembayaran Anda Diterima | Pamsimas Nagari V Koto');
@@ -547,9 +562,9 @@ class Admin extends CI_Controller
 				} else {
 					$no--;
 				}
-				
+
 			endforeach;
-			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert"> '.$no.' Email berhasil dikirim</div>');
+			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert"> ' . $no . ' Email berhasil dikirim</div>');
 
 			redirect('admin/email');
 		} else {

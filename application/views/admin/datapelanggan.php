@@ -1,49 +1,76 @@
        <!-- Begin Page Content -->
        <div class="container-fluid">
 
-           <!-- Page Heading -->
-           <h1 class="h3 mb-4 text-gray-800"><?= $title; ?> </h1>
+       	<!-- Page Heading -->
+       	<h1 class="h3 mb-4 text-gray-800"><?= $title; ?> </h1>
 
-           <div class="row">
-               <div class="col-lg-12">
-                   </form>
+       	<div class="row">
+       		<div class="col-lg-12">
+       			</form>
 
-                   <?= $this->session->flashdata('message'); ?>
+       			<?= $this->session->flashdata('message'); ?>
 
-                   <table class="table table-hover" id="tabel">
-                       <thead>
-                           <tr>
-                               <th scope="col-lg">No.</th>
-                               <th scope="col-lg">Email</th>
-                               <th scope="col-lg">Nama Pelanggan</th>
-                               <th scope="col">NIK</th>
-                               <th scope="col">Alamat</th>
-                               <th scope="col">Pekerjaan</th>
-                               <th scope="col">Tanggal Daftar</th>
-                               <th scope="col">Action</th>
-                           </tr>
-                       </thead>
-                       <tbody>
-                           <?php $i = 1; ?>
-                           <?php foreach ($datapelanggan as $p) : ?>
-                               <tr>
-                                   <th scope="row"><?= $i; ?> </th>
-                                   <td> <?= $p['email']; ?> </td>
-                                   <td> <?= $p['name']; ?></td>
-                                   <td> <?= $p['nik']; ?> </td>
-                                   <td> <?= $p['alamat']; ?> </td>
-                                   <td> <?= $p['pekerjaan']; ?> </td>
-                                   <td> <?= date('d F Y', $p['date_created']); ?> </td>
-                                   <td><a href="<?= base_url(); ?>Admin/editpelanggan/<?= $p['id']; ?>" class="badge badge-success"> Edit </a>
-                                       <a href="<?= base_url(); ?>Admin/hapuspelanggan/<?= $p['id']; ?>" class="badge badge-danger" onclick="return confirm('Hapus data?');" class=" badge badge-danger"> Delete </a>
-                                   </td>
-                               </tr>
-                               <?php $i++; ?>
-                           <?php endforeach; ?>
-                       </tbody>
-                   </table>
-               </div>
-           </div>
+       			<table class="table table-hover" id="tabel">
+       				<thead>
+       					<tr>
+       						<th scope="col-lg">No.</th>
+       						<th scope="col-lg">Email</th>
+       						<th scope="col-lg">Nama Pelanggan</th>
+       						<th scope="col">Tanggal Daftar</th>
+       						<th scope="col">Pembayaran Terakhir (<?= date('F'); ?>)</th>
+       						<th scope="col">NIK</th>
+       						<th scope="col">Alamat</th>
+       						<th scope="col">Pekerjaan</th>
+       						<th scope="col">Status</th>
+       						<th scope="col">Action</th>
+       					</tr>
+       				</thead>
+       				<tbody>
+       					<?php $i = 1; ?>
+       					<?php foreach ($datapelanggan as $p) : ?>
+       						<?php
+								$this->db->where('email', $p['email']);
+								$d = $this->db->get('user');
+								$q = $d->row();
+
+								// pembayaran terakhir
+								$bulan = date('n');
+								$this->db->where('tahun', date('Y'));
+								$this->db->where('bulan', $bulan);
+								$this->db->where('user_id', $q->id);
+								$pem = $this->db->get('payment');
+								$qp = $pem->row();
+								?>
+       						<tr>
+       							<th scope="row"><?= $i; ?> </th>
+       							<td> <?= $p['email']; ?> </td>
+       							<td> <?= $p['name']; ?></td>
+       							<td> <?= date('d F Y', $q->date_created); ?> </td>
+       							<td>
+       								<?php
+										if (isset($qp)) {
+											echo "Sudah dibayar";
+										} else {
+											echo "Belum dibayar";
+										}
+										?>
+       							</td>
+       							<td> <?= $p['nik']; ?> </td>
+       							<td> <?= $p['alamat']; ?> </td>
+       							<td> <?= $p['pekerjaan']; ?> </td>
+       							<td>
+       								<?= ($q->is_active == 1) ? "Aktif" : "Non-Aktif"; ?>
+       							</td>
+       							<td><a href="<?= base_url(); ?>Admin/editpelanggan/<?= $p['id']; ?>" class="badge badge-success"> Edit </a>
+       								<a href="<?= base_url(); ?>Admin/hapuspelanggan/<?= $p['id']; ?>" class="badge badge-danger" onclick="return confirm('Hapus data?');" class=" badge badge-danger"> Delete </a>
+       							</td>
+       						</tr>
+       						<?php $i++; ?>
+       					<?php endforeach; ?>
+       				</tbody>
+       			</table>
+       		</div>
+       	</div>
        </div>
        <!-- /.container-fluid -->
 

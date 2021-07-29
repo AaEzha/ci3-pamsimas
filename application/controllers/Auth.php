@@ -15,8 +15,13 @@ class Auth extends CI_Controller
 			redirect('user');
 		}
 
-		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
-		$this->form_validation->set_rules('password', 'Password', 'trim|required');
+		$this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email', [
+			'required' => 'Email harus diisi',
+			'valid_email' => 'Format email keliru'
+		]);
+		$this->form_validation->set_rules('password', 'Password', 'trim|required', [
+			'required' => 'Password harus diisi'
+		]);
 
 		if ($this->form_validation->run() == false) {
 			$data['konten'] = "auth/login";
@@ -57,17 +62,17 @@ class Auth extends CI_Controller
 					}
 				} else {
 					$this->session->set_flashdata('message', '<div class="alert alert-danger" 
-                    role="alert"> Wrong password </div>');
+                    role="alert"> Password salah </div>');
 					redirect('auth');
 				}
 			} else {
 				$this->session->set_flashdata('message', '<div class="alert alert-danger" 
-            role="alert"> This email has not been activated </div>');
+            role="alert"> Akun dengan email ini belum diaktivasi </div>');
 				redirect('auth');
 			}
 		} else {
 			$this->session->set_flashdata('message', '<div class="alert alert-danger" 
-            role="alert"> Email is not registered </div>');
+            role="alert"> Email tidak terdafar </div>');
 			redirect('auth');
 		}
 	}
@@ -79,7 +84,9 @@ class Auth extends CI_Controller
 			redirect('user');
 		}
 
-		$this->form_validation->set_rules('name', 'Name', 'required|trim');
+		$this->form_validation->set_rules('name', 'Name', 'required|trim', [
+			'required' => 'Nama harus diisi'
+		]);
 		$this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]', [
 			'is_unique' => 'This email has already registered!'
 		]);
@@ -156,7 +163,7 @@ class Auth extends CI_Controller
 			// Tampilkan pesan sukses atau error
 			if ($this->email->send()) {
 				$this->session->set_flashdata('message', '<div class="alert alert-success" 
-				role="alert"> Congratulation! your account has been created. Please verify your email first.</div>');
+				role="alert"> Selamat, akun Anda berhasil dibuat. Silahkan verifikasi email terlebih dahulu.</div>');
 			} else {
 				$this->db->where('email', $this->input->post('email', true));
 				$this->db->delete('pelanggan');
@@ -178,7 +185,7 @@ class Auth extends CI_Controller
 		$this->session->unset_userdata('role_id');
 
 		$this->session->set_flashdata('message', '<div class="alert alert-success" 
-        role="alert"> You have been logout!</div>');
+        role="alert"> Anda keluar dari sistem!</div>');
 		redirect('auth');
 	}
 
@@ -187,7 +194,25 @@ class Auth extends CI_Controller
 		$this->db->set('is_active', 1);
 		$this->db->where('kode', $kode);
 		$this->db->update('user');
-		echo "Congratulation! your account has been activated. Please <a href='".base_url('auth')."'>login</a>.";
+
+		// ambil detail user
+		$this->db->where('kode', $kode);
+		$q = $this->db->get('user');
+		$d = $q->row();
+		$user_id = $d->id;
+
+		// input tagihan awal
+		$bulan = date('n') + 1;
+		$tahun = ($bulan == 13) ? date('Y') + 1 : date('Y');
+		$bulan = ($bulan == 13) ? 1 : $bulan;
+		$data = [
+			'user_id' => $user_id,
+			'bulan' => $bulan,
+			'tahun' => $tahun
+		];
+		$this->db->insert('tagihan', $data);
+
+		echo "Selamat! Akun Anda telah aktif. Silahkan <a href='" . base_url('auth') . "'>login</a>.";
 	}
 
 	public function blocked()

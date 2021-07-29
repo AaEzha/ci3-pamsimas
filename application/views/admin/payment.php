@@ -58,7 +58,7 @@
         							<td> <?= $p->alamat; ?> </td>
 									<td> <?= date('d F Y', $user->date_created); ?> </td>
         							<td> <?= $arrs[$p->bulan]; ?> <?= $p->tahun; ?> </td>
-        							<td> <?= $p->date; ?> </td>
+        							<td> <?= tanggal($p->date); ?> </td>
         							<td> <?= number_format($p->biaya, 0, ',', '.'); ?> </td>
         							<td> <?= number_format($p->denda, 0, ',', '.'); ?> </td>
         							<td> <?= number_format($p->tagihan, 0, ',', '.'); ?> </td>

@@ -286,6 +286,44 @@ class User extends CI_Controller
 			$this->load->view('user/pembayaran', $data);
 			$this->load->view('templates/footer');
 		} else {
+
+			// cek pembayaran dengan bulan yg sama
+			$this->db->where('bulan', $this->input->post('bulan'));
+			$this->db->where('tahun', $this->input->post('tahun'));
+			$this->db->where('status', 1);
+			$this->db->where('user_id', $this->session->user_id);
+			$d = $this->db->get('payment');
+			$cek = $d->num_rows();
+
+			if($cek > 0) {
+				$this->session->set_flashdata('message', 'Duplikat Pembayaran. Silahkan diperiksa kembali.');
+				return redirect('user/list');
+			}
+
+			// cek bulan pembayaran tidak boleh lebih kecil dari bulan pendaftaran
+			$this->db->where('id', $this->session->user_id);
+			$d = $this->db->get('user');
+			$cek = $d->row();
+			$bulan_daftar = date('n', $cek->date_created);
+			if($this->input->post('bulan') <= $bulan_daftar) {
+				$this->session->set_flashdata('message', 'Anda tidak memiliki tagihan untuk bulan tersebut.');
+				return redirect('user/list');
+			}
+
+			// cek ada tagihan sebelumnya yang belum dibayarkan
+			$this->db->where('user_id', $this->session->user_id);
+			$this->db->where('bulan', $this->input->post('bulan'));
+			$this->db->where('tahun', $this->input->post('tahun'));
+			$d = $this->db->get('tagihan');
+			$qd = $d->num_rows();
+
+			if ($qd != 1) {
+				$this->session->set_flashdata('message', 'Masih ada tagihan di bulan lain yang belum Anda bayarkan');
+				return redirect('user/list');
+			}
+
+
+
 			$config['upload_path']          = './assets/uploads/payments/';
 			$config['allowed_types']        = 'gif|jpg|png|jpeg';
 			$config['encrypt_name']         = true;
@@ -293,26 +331,15 @@ class User extends CI_Controller
 			$this->load->library('upload', $config);
 
 			if (!$this->upload->do_upload('bukti')) {
-				$this->session->set_flashdata('msg', 'Terjadi kesalahan pada pemilihan gambar');
-				return redirect('user/pembayaran', 'refresh');
+				$this->session->set_flashdata('message', 'Terjadi kesalahan pada pemilihan gambar konfirmasi pembayaran');
+				return redirect('user/list', 'refresh');
 			} else {
 				// untuk tagihan
 				$untukTagihan = $this->input->post('tahun') . "-" . $this->input->post('bulan') . "-" . $this->tanggalTelat;
 
 				$denda = $this->tanggalan($untukTagihan, $this->input->post('date'));
 
-				// cek pembayaran dengan bulan yg sama
-				$this->db->where('bulan', $this->input->post('bulan'));
-				$this->db->where('tahun', $this->input->post('tahun'));
-				$this->db->where('status', 1);
-				$this->db->where('user_id', $this->session->user_id);
-				$d = $this->db->get('payment');
-				$cek = $d->num_rows();
-
-				if($cek > 0) {
-					$this->session->set_flashdata('message', 'Duplikat Pembayaran. Silahkan diperiksa kembali.');
-					return redirect('user/list');
-				}
+				
 
 				$data = [
 					'user_id' => $this->session->user_id,

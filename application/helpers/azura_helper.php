@@ -39,8 +39,13 @@ function tanggal($tgl)
 	$tgl = explode("-", $tgl);
 	$tahun = $tgl[0];
 	$bulan = (int) $tgl[1];
+	$tanggal = "";
+
+	if(isset($tgl[2])){
+		$tanggal = $tgl[2] . " ";
+	}
 
 	$arr = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 
-	return $arr[$bulan] . " " . $tahun;
+	return $tanggal . $arr[$bulan] . " " . $tahun;
 }
