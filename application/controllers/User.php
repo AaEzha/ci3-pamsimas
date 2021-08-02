@@ -312,7 +312,8 @@ class User extends CI_Controller
 			$d = $this->db->get('user');
 			$cek = $d->row();
 			$bulan_daftar = date('n', $cek->date_created);
-			if ($this->input->post('bulan') <= $bulan_daftar) {
+			$tahun_daftar = date('Y', $cek->date_created);
+			if ($this->input->post('bulan') <= $bulan_daftar and $this->input->post('tahun') <= $tahun_daftar) {
 				$this->session->set_flashdata('message', 'Anda tidak memiliki tagihan untuk bulan tersebut.');
 				return redirect('user/list');
 			}
