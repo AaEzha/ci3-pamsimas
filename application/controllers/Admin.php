@@ -310,7 +310,7 @@ class Admin extends CI_Controller
 		$data['user'] = $this->db->get_where('user', ['email' =>
 		$this->session->userdata('email')])->row_array();
 
-		$this->db->order_by('date', 'desc');
+		$this->db->order_by('id', 'desc');
 		$data['data'] = $this->db->get('payment')->result();
 		$data['js'] = 'admin/js';
 
@@ -405,7 +405,7 @@ class Admin extends CI_Controller
 		}
 	}
 
-	public function payment_ubah($id, $status)
+	public function payment_ubah($id, $status, $tunggakan = 0)
 	{
 
 		$this->db->where('id', $id);
@@ -450,7 +450,8 @@ class Admin extends CI_Controller
 			$data = [
 				'user_id' => $user_id,
 				'bulan' => $bulan,
-				'tahun' => $tahun
+				'tahun' => $tahun,
+				'tunggakan' => $tunggakan
 			];
 			$this->db->insert('tagihan', $data);
 
@@ -573,6 +574,26 @@ class Admin extends CI_Controller
 			$this->load->view('templates/sidebar', $data);
 			$this->load->view('templates/topbar', $data);
 			$this->load->view('admin/email', $data);
+			$this->load->view('templates/footer');
+		}
+	}
+
+	public function payment_kurang($id)
+	{
+		$this->form_validation->set_rules('id', 'ID', 'required|trim');
+		$this->form_validation->set_rules('kurang', 'ID', 'required|trim');
+		if ($this->form_validation->run() == true) {
+			$this->payment_ubah($id, md5('1'), $this->input->post('kurang'));
+		} else {
+			$this->db->where('id', $id);
+			$q = $this->db->query("select * from payment where id='" . $id . "'");
+			$data['data'] = $q->row();
+			$data['id'] = $id;
+			$data['title'] = 'Payment - Kurang';
+			$this->load->view('templates/header', $data);
+			$this->load->view('templates/sidebar', $data);
+			$this->load->view('templates/topbar', $data);
+			$this->load->view('admin/paymentkurang', $data);
 			$this->load->view('templates/footer');
 		}
 	}

@@ -144,9 +144,11 @@
   					var total = response.total;
   					var tanggalBayar = response.tanggalBayar;
   					var diff = response.diff;
+  					var tunggakan = response.tunggakan;
 
   					$('#denda').val(denda);
   					$('#tagihan').val(total);
+  					$('#tunggakan').val(tunggakan);
   				}
 
   			},

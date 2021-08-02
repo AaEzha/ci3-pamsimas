@@ -80,6 +80,14 @@
 				</div>
 
 				<div class="form-group">
+					<label for="tunggakan" class="col-sm-4 col-form-label">Jumlah Tunggakan</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="tunggakan" name="tunggakan" value="<?= set_value('tunggakan') ?>" readonly>
+						<?= form_error('tunggakan', '<small class="text-danger pl-3">', '</small>'); ?>
+					</div>
+				</div>
+
+				<div class="form-group">
 					<label for="tagihan" class="col-sm-4 col-form-label">Jumlah Tagihan</label>
 					<div class="col-sm-10">
 						<input type="text" class="form-control" id="tagihan" name="tagihan" value="<?= set_value('tagihan') ?>" readonly>

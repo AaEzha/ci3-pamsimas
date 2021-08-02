@@ -38,6 +38,7 @@
         						<th scope="col">Tanggal Pembayaran</th>
         						<th scope="col">Biaya per Bulan</th>
         						<th scope="col">Denda</th>
+        						<th scope="col">Tunggakan</th>
         						<th scope="col">Total Tagihan</th>
         						<th scope="col">Bukti</th>
         						<th scope="col">Status</th>
@@ -61,6 +62,7 @@
         							<td> <?= tanggal($p->date); ?> </td>
         							<td> <?= number_format($p->biaya, 0, ',', '.'); ?> </td>
         							<td> <?= number_format($p->denda, 0, ',', '.'); ?> </td>
+        							<td> <?= number_format($p->tunggakan, 0, ',', '.'); ?> </td>
         							<td> <?= number_format($p->tagihan, 0, ',', '.'); ?> </td>
         							<td> <a href="<?= base_url('assets/uploads/'); ?><?= $p->bukti; ?>" target="_blank"><img src="<?= base_url('assets/uploads/'); ?><?= $p->bukti; ?>" width="100"></a> </td>
         							<td>
@@ -76,7 +78,8 @@
         							</td>
         							<td>
         								<?php if ($p->status == 0) { ?>
-        									<a class="btn btn-primary btn-sm" href="<?= base_url('admin/payment_ubah/' . $p->id . '/' . md5('1')); ?>" role="button" title="terima pembayaran"><i class="fa fa-check" aria-hidden="true"></i></a>
+        									<a class="btn btn-primary btn-sm" href="<?= base_url('admin/payment_ubah/' . $p->id . '/' . md5('1')); ?>" role="button" title="terima pembayaran lunas"><i class="fa fa-check" aria-hidden="true"></i></a>
+        									<a class="btn btn-warning btn-sm" href="<?= base_url('admin/payment_kurang/' . $p->id . '/' . md5('1')); ?>" role="button" title="terima pembayaran kurang"><i class="fa fa-check" aria-hidden="true"></i></a>
         									<a class="btn btn-danger btn-sm" href="#" role="button" title="tolak pembayaran" onclick="batal(<?= $p->id; ?>)"><i class="fa fa-trash" aria-hidden="true"></i></a>
         								<?php } else if ($p->status == 1) { ?>
         									<!-- <a class="btn btn-danger btn-sm" href="#" role="button" title="tolak pembayaran" onclick="batal(<?= $p->id; ?>)"><i class="fa fa-trash" aria-hidden="true"></i></a>

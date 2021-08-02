@@ -59,12 +59,11 @@ class User extends CI_Controller
 			$pekerjaan = $this->input->post('pekerjaan');
 
 			//cek data jika ada gambar yang di upload
-			if(!empty($_FILES['image']['name']))
-			{
+			if (!empty($_FILES['image']['name'])) {
 				$config['upload_path']          = './assets/img/profile/';
 				$config['allowed_types']        = 'gif|jpg|png|jpeg';
 				$config['encrypt_name']         = true;
-	
+
 				$this->load->library('upload', $config);
 
 				if (!$this->upload->do_upload('image')) {
@@ -192,11 +191,12 @@ class User extends CI_Controller
 
 		$this->form_validation->set_rules('bulan', 'Bulan', 'required');
 		if ($this->form_validation->run() == false) {
+			$this->db->order_by('date', 'DESC');
 			$data['data'] = $this->db->get_where('payment', ['user_id' => $data['user']['id']])->result();
-		}else{
+		} else {
 			$bulan = $this->input->post('bulan');
 			$this->db->like('date', $bulan, 'after');
-			$this->db->where('user_id',$data['user']['id']);
+			$this->db->where('user_id', $data['user']['id']);
 			$data['data'] = $this->db->get('payment')->result();
 		}
 
@@ -220,9 +220,9 @@ class User extends CI_Controller
 			$denda = $this->dendaPerHari * $keterlambatan;
 		}
 
-		if($output == "denda"){
+		if ($output == "denda") {
 			return $denda;
-		}else{
+		} else {
 			return $keterlambatan;
 		}
 	}
@@ -242,6 +242,11 @@ class User extends CI_Controller
 			$bulan = $this->input->post('bulan');
 			$tahun = $this->input->post('tahun');
 
+			// cek tunggakan
+			$this->db->where('user_id', $this->session->user_id);
+			$d = $this->db->get('tagihan');
+			$t = $d->row();
+
 			// untuk tagihan
 			$untukTagihan = $tahun . "-" . $bulan . "-" . $this->tanggalTelat;
 
@@ -251,7 +256,8 @@ class User extends CI_Controller
 				'tanggalBayar' => $tanggalBayar,
 				'biaya' => $biayaPerBulan,
 				'denda' => $denda,
-				'total' => $biayaPerBulan + $denda,
+				'tunggakan' => $t->tunggakan,
+				'total' => $biayaPerBulan + $denda + $t->tunggakan,
 				'diff' => $this->tanggalan($untukTagihan, $tanggalBayar, 1)
 			];
 		}
@@ -278,6 +284,7 @@ class User extends CI_Controller
 		$this->form_validation->set_rules('biaya', 'Biaya', 'required|trim');
 		$this->form_validation->set_rules('denda', 'Denda', 'required|trim');
 		$this->form_validation->set_rules('tagihan', 'Tagihan', 'required|trim');
+		$this->form_validation->set_rules('tunggakan', 'Nominal Tunggakan', 'required|trim');
 
 		if ($this->form_validation->run() == false) {
 			$this->load->view('templates/header', $data);
@@ -295,7 +302,7 @@ class User extends CI_Controller
 			$d = $this->db->get('payment');
 			$cek = $d->num_rows();
 
-			if($cek > 0) {
+			if ($cek > 0) {
 				$this->session->set_flashdata('message', 'Duplikat Pembayaran. Silahkan diperiksa kembali.');
 				return redirect('user/list');
 			}
@@ -305,7 +312,7 @@ class User extends CI_Controller
 			$d = $this->db->get('user');
 			$cek = $d->row();
 			$bulan_daftar = date('n', $cek->date_created);
-			if($this->input->post('bulan') <= $bulan_daftar) {
+			if ($this->input->post('bulan') <= $bulan_daftar) {
 				$this->session->set_flashdata('message', 'Anda tidak memiliki tagihan untuk bulan tersebut.');
 				return redirect('user/list');
 			}
@@ -318,7 +325,11 @@ class User extends CI_Controller
 			$qd = $d->num_rows();
 
 			if ($qd != 1) {
-				$this->session->set_flashdata('message', 'Masih ada tagihan di bulan lain yang belum Anda bayarkan');
+				$this->db->where('user_id', $this->session->user_id);
+				$d = $this->db->get('tagihan');
+				$cek = $d->row();
+				$arrs = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+				$this->session->set_flashdata('message', 'Masih ada tagihan di bulan ' . $arrs[$cek->bulan] . ' ' . $cek->tahun . ' yang belum Anda bayarkan');
 				return redirect('user/list');
 			}
 
@@ -339,7 +350,7 @@ class User extends CI_Controller
 
 				$denda = $this->tanggalan($untukTagihan, $this->input->post('date'));
 
-				
+
 
 				$data = [
 					'user_id' => $this->session->user_id,
@@ -349,10 +360,11 @@ class User extends CI_Controller
 					'bulan' => $this->input->post('bulan'),
 					'tahun' => $this->input->post('tahun'),
 					'biaya' => $this->input->post('biaya'),
+					'tunggakan' => $this->input->post('tunggakan'),
 					'denda' => $denda,
-					'tagihan' => $this->biayaPerBulan + $denda,
+					'tagihan' => $this->biayaPerBulan + $denda + $this->input->post('tunggakan'),
 					'bukti' => "payments/" . $this->upload->data("file_name"),
-	
+
 				];
 
 				$this->db->insert('payment', $data);
