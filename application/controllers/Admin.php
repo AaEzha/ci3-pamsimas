@@ -277,11 +277,19 @@ class Admin extends CI_Controller
 	public function editPelanggan($id)
 	{
 		$this->load->model('Pelanggan_model');
+		$this->load->model('Tagihan_model');
 		$data['title'] = 'Edit Data Pelanggan';
 		$data['user'] = $this->db->get_where('user', ['email' =>
 		$this->session->userdata('email')])->row_array();
 
 		$data['pelanggan'] = $this->Pelanggan_model->getPelangganById($id);
+
+		// ambil user_id
+		$this->db->where('email', $data['pelanggan']['email']);
+		$user = $this->db->get_where('user', ['email' => $data['pelanggan']['email']])->row();
+		// var_dump($user); die;
+		$data['tagihan'] = $this->Tagihan_model->getPelangganById($user->id);
+
 
 		$this->form_validation->set_rules('email', 'Email', 'required');
 		$this->form_validation->set_rules('name', 'Name', 'required');
@@ -596,5 +604,24 @@ class Admin extends CI_Controller
 			$this->load->view('admin/paymentkurang', $data);
 			$this->load->view('templates/footer');
 		}
+	}
+
+	public function ubah_tagihan()
+	{
+		$this->form_validation->set_rules('id', 'ID', 'required|trim');
+		$this->form_validation->set_rules('bulan', 'Bulan', 'required|trim');
+		$this->form_validation->set_rules('tahun', 'Tahun', 'required|trim');
+		$this->form_validation->set_rules('tunggakan', 'Tunggakan', 'required|trim');
+		if ($this->form_validation->run() == true) {
+			$data = [
+				'bulan' => $this->input->post('bulan'),
+				'tahun' => $this->input->post('tahun'),
+				'tunggakan' => $this->input->post('tunggakan'),
+			];
+			$this->db->where('user_id', $this->input->post('id'));
+			$this->db->update('tagihan', $data);
+			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Pengaturan tagihan sudah diubah.</div>');
+		}
+		return redirect('admin/pelanggan');
 	}
 }

@@ -25,6 +25,7 @@ class Koordinator extends CI_Controller
 
 	public function report()
 	{
+		$this->kas();
 		$data['bln'] = [
 			['id' => '01', 'bulan' => 'Januari'],
 			['id' => '02', 'bulan' => 'Februari'],
@@ -70,6 +71,19 @@ class Koordinator extends CI_Controller
 			$this->load->view('templates/topbar', $data);
 			$this->load->view('koordinator/report_output', $data);
 			$this->load->view('templates/footer');
+		}
+	}
+
+	public function kas()
+	{
+		$this->db->order_by('date', 'asc');
+		$data = $this->db->get('kas_harian')->result();
+		$jumlah = 0;
+		foreach ($data as $d) {
+			$jumlah = $jumlah + $d->debet - $d->kredit;
+			$this->db->set('jumlah', $jumlah);
+			$this->db->where('id', $d->id);
+			$this->db->update('kas_harian');
 		}
 	}
 }

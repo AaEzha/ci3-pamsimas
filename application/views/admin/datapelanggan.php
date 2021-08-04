@@ -17,7 +17,7 @@
        						<th scope="col-lg">Email</th>
        						<th scope="col-lg">Nama Pelanggan</th>
        						<th scope="col">Tanggal Daftar</th>
-       						<th scope="col">Pembayaran Terakhir (<?= date('F'); ?>)</th>
+       						<th scope="col">Pembayaran Selanjutnya</th>
        						<th scope="col">NIK</th>
        						<th scope="col">Alamat</th>
        						<th scope="col">Pekerjaan</th>
@@ -26,7 +26,10 @@
        					</tr>
        				</thead>
        				<tbody>
-       					<?php $i = 1; ?>
+       					<?php 
+						$i = 1; 
+						$arrs = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+						?>
        					<?php foreach ($datapelanggan as $p) : ?>
        						<?php
 								$this->db->where('email', $p['email']);
@@ -34,12 +37,17 @@
 								$q = $d->row();
 
 								// pembayaran terakhir
-								$bulan = date('n');
-								$this->db->where('tahun', date('Y'));
-								$this->db->where('bulan', $bulan);
+								// $bulan = date('n');
+								// $this->db->where('tahun', date('Y'));
+								// $this->db->where('bulan', $bulan);
+								// $this->db->where('user_id', $q->id);
+								// $pem = $this->db->get('payment');
+								// $qp = $pem->row();
+
+								// pembayaran selanjutnya
 								$this->db->where('user_id', $q->id);
-								$pem = $this->db->get('payment');
-								$qp = $pem->row();
+								$tag = $this->db->get('tagihan');
+								$qt = $tag->row();
 								?>
        						<tr>
        							<th scope="row"><?= $i; ?> </th>
@@ -47,13 +55,7 @@
        							<td> <?= $p['name']; ?></td>
        							<td> <?= date('d F Y', $q->date_created); ?> </td>
        							<td>
-       								<?php
-										if (isset($qp)) {
-											echo "Sudah dibayar";
-										} else {
-											echo "Belum dibayar";
-										}
-										?>
+       								<?= $arrs[$qt->bulan] . " " . $qt->tahun; ?>
        							</td>
        							<td> <?= $p['nik']; ?> </td>
        							<td> <?= $p['alamat']; ?> </td>
