@@ -84,7 +84,7 @@
 				<div class="card-body">
 
 					<form action="<?=base_url('admin/ubah_tagihan');?>" method="post">
-						<input type="hidden" name="id" value="<?= $tagihan["user_id"]; ?>">
+						<input type="hidden" name="id" value="<?= $user_id; ?>">
 
 						<div class="form-group">
 

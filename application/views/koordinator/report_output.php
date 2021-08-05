@@ -40,12 +40,8 @@
         					<?php $no = "a";
 							foreach ($kas_masuk as $kas) : ?>
         						<?php if ($kas->nominal > 0) : ?>
-									<?php
-									$ket = explode(" ", $kas->ket);
-									$ket = $ket[0]. " " . $ket[1];
-									?>
          							<div class="row">
-        								<div class="col-md-6"><?= $no++; ?>. <?= $ket; ?></div>
+        								<div class="col-md-6"><?= $no++; ?>. <?= $kas->ket; ?></div>
         								<div class="col-md-6"><?= number_format($kas->nominal, 0, ',', '.'); ?></div>
         							</div>
         							<?php $jumlah_pemasukan += $kas->nominal; ?>

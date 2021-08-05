@@ -267,8 +267,32 @@ class Admin extends CI_Controller
 
 	public function hapuspelanggan($id)
 	{
+		// ambil detail pelanggan
+		$this->db->where('id', $id);
+		$p = $this->db->get('pelanggan')->row();
+		$email = $p->email;
+		
+		// ambil detail user
+		$this->db->where('email', $email);
+		$p = $this->db->get('user')->row();
+		$user_id = $p->id;
+		
+		// hapus tabel pelanggan
 		$this->db->where('id', $id);
 		$this->db->delete('pelanggan');
+
+		// hapus tabel tagihan
+		$this->db->where('user_id', $user_id);
+		$this->db->delete('tagihan');
+
+		// hapus tabel payment
+		$this->db->where('user_id', $user_id);
+		$this->db->delete('payment');
+		
+		// hapus tabel user
+		$this->db->where('email', $email);
+		$this->db->delete('user');
+
 		$this->session->set_flashdata('message', '<div class="alert alert-success" 
         role="alert"> Data Pelanggan berhasil dihapus </div>');
 		redirect('admin/pelanggan');
@@ -289,6 +313,7 @@ class Admin extends CI_Controller
 		$user = $this->db->get_where('user', ['email' => $data['pelanggan']['email']])->row();
 		// var_dump($user); die;
 		$data['tagihan'] = $this->Tagihan_model->getPelangganById($user->id);
+		$data['user_id'] = $user->id;
 
 
 		$this->form_validation->set_rules('email', 'Email', 'required');
@@ -424,7 +449,7 @@ class Admin extends CI_Controller
 
 			$d = [
 				'date' => date('Y-m-d'),
-				'ket' => 'Pembayaran Air a/n ' . $data->name . ' bulan ' . $data->bulan . ' tahun ' . $data->tahun . ' pada ' . $data->date,
+				'ket' => 'Pembayaran Air '.$data->bulan.'/'.$data->tahun.' a/n ' . $data->name,
 				'debet' => $data->tagihan,
 				'kredit' => '0'
 			];
@@ -613,14 +638,24 @@ class Admin extends CI_Controller
 		$this->form_validation->set_rules('tahun', 'Tahun', 'required|trim');
 		$this->form_validation->set_rules('tunggakan', 'Tunggakan', 'required|trim');
 		if ($this->form_validation->run() == true) {
+			// cek ada atau tidak
+			$this->db->where('user_id', $this->input->post('id'));
+			$cek = $this->db->get('tagihan')->row();
 			$data = [
 				'bulan' => $this->input->post('bulan'),
 				'tahun' => $this->input->post('tahun'),
 				'tunggakan' => $this->input->post('tunggakan'),
 			];
-			$this->db->where('user_id', $this->input->post('id'));
-			$this->db->update('tagihan', $data);
+			if (!$cek) {
+				$this->db->set('user_id', $this->input->post('id'));
+				$this->db->insert('tagihan', $data);
+			} else {
+				$this->db->where('user_id', $this->input->post('id'));
+				$this->db->update('tagihan', $data);
+			}
 			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Pengaturan tagihan sudah diubah.</div>');
+		}else{
+			$this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Ada kesalahan pada pengaturan tagihan</div>');
 		}
 		return redirect('admin/pelanggan');
 	}
